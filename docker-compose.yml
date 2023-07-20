@@ -1,0 +1,57 @@
+version: "2"
+
+services:
+  # Deploy using the custom image automatically be created during the build process.
+  core:
+    build: ./../fsp-core
+    env_file:
+      - ./../fsp-core/.env.local
+    ports:
+      - 3000:3000
+  mysql:
+    image: mysql
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    volumes:
+      - ${HOME}/data/mysql:/var/lib/mysql
+    # - ${HOME}/data/mysql.cnf:/etc/mysql/my.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD=rutrut
+      - MYSQL_USER=sgad_writer
+      - MYSQL_PASSWORD=eiPju&AJ4q0D
+      - MYSQL_DATABASE=next_digital_platform
+    ports:
+      - 3306:3306
+  demo_casino:
+    build: ./../fsp-demo-casino
+    container_name: demo-casino
+    env_file:
+      - ./../fsp-demo-casino/.env
+    ports:
+      - 3002:3002
+  demo_math:
+    build: ./../fsp-game-math-mock
+    container_name: demo-math
+    env_file:
+      - ./../fsp-game-math-mock/.env.local
+    ports:
+      - 3012:3012
+  rng:
+    build: ./../fsp-rng
+    container_name: rng
+    ports:
+      - 3005:3005
+  game_history:
+    build: ./../fsp-game-history
+    container_name: game_history
+    env_file:
+      - ./../fsp-game-history/.env.local
+    ports:
+      - 3003:3003
+  round_checker:
+    build: ./../fsp-round-checker
+    container_name: round-checker
+    env_file:
+      - ./../fsp-round-checker/.env.local
+    ports:
+      - 3015:3015
